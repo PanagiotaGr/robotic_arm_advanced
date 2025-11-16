@@ -28,4 +28,16 @@ The project is designed for **postgraduate-level coursework** in robotics, contr
 ---
 
 ## 📁 Package Structure
+robotic_arm_advanced/
+│
+├── robotic_arm_advanced/
+│ ├── fk_node.py
+│ ├── ik_dls_node.py
+│ ├── dummy_joint_pub.py
+│ └── init.py
+│
+├── package.xml
+├── setup.py
+└── README.md
+
 
