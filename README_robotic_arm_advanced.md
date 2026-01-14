@@ -10,7 +10,7 @@ Designed for **postgraduate-level coursework** in robotics, control, and ROS-bas
 
 ---
 
-## 📌 Features
+##  Features
 
 ### ✔ Forward Kinematics (FK)
 - Implemented using the **Denavit–Hartenberg (DH)** convention  
@@ -31,7 +31,7 @@ Designed for **postgraduate-level coursework** in robotics, control, and ROS-bas
 
 ---
 
-## 📁 Package Structure
+##  Package Structure
 
 ```
 robotic_arm_advanced/
@@ -45,9 +45,9 @@ robotic_arm_advanced/
 └── README.md
 ```
 
----
+----
 
-## 🧰 Requirements
+## Requirements
 
 - ROS 2 (Humble / Iron / Jazzy should work—any recent ROS 2 distro)
 - Python 3
@@ -60,7 +60,7 @@ Messages used:
 
 ---
 
-## 🚀 Build & Run
+##  Build & Run
 
 ### 1) Create/enter a ROS 2 workspace
 ```bash
@@ -83,7 +83,7 @@ source install/setup.bash
 
 ---
 
-## ▶️ Running the Nodes
+## Running the Nodes
 
 ### A) Dummy publisher → FK (visualize end-effector pose)
 **Terminal 1**
@@ -121,7 +121,7 @@ ros2 topic echo /ik_joint_states
 
 ---
 
-## 📡 Topics
+##  Topics
 
 ### Published
 - `/joint_states` (`sensor_msgs/JointState`)  
@@ -162,42 +162,10 @@ ros2 run robotic_arm_advanced fk_node --ros-args   -p joint_names:="['joint1','j
 
 ---
 
-## 🧠 Math Summary
-
-### Forward Kinematics (DH)
-For each link \(i\), the DH transform:
-\[
-A_i(\theta_i, d_i, a_i, \alpha_i) =
-\begin{bmatrix}
-\cos\theta_i & -\sin\theta_i\cos\alpha_i & \sin\theta_i\sin\alpha_i & a_i\cos\theta_i \\
-\sin\theta_i & \cos\theta_i\cos\alpha_i  & -\cos\theta_i\sin\alpha_i & a_i\sin\theta_i \\
-0             & \sin\alpha_i               & \cos\alpha_i               & d_i \\
-0             & 0                           & 0                           & 1
-\end{bmatrix}
-\]
-Then:
-\[
-T_0^6 = A_1 A_2 A_3 A_4 A_5 A_6
-\]
-
-### Inverse Kinematics (Damped Least Squares)
-Position-only IK (3D):
-\[
-\Delta x = x_{target} - x_{current}
-\]
-Jacobian (numerical) \(J \in \mathbb{R}^{3\times 6}\), update:
-\[
-\Delta q = J^T (J J^T + \lambda^2 I)^{-1} \Delta x
-\]
-Iterate:
-\[
-q \leftarrow q + \Delta q
-\]
-until \(\|\Delta x\| < \text{tol}\) or `max_iters` reached.
 
 ---
 
-## 🧪 Testing Tips
+##  Testing Tips
 
 - Start with conservative values:
   - `damping = 0.05` to `0.2`
@@ -210,7 +178,7 @@ until \(\|\Delta x\| < \text{tol}\) or `max_iters` reached.
 
 ---
 
-## 🗺️ Roadmap (Optional Extensions)
+##  Roadmap (Optional Extensions)
 - Add **orientation IK** (6D pose error) and full **6×6 Jacobian**
 - Add **joint limits** & constraint handling
 - Integrate with RViz / MoveIt 2
@@ -218,14 +186,12 @@ until \(\|\Delta x\| < \text{tol}\) or `max_iters` reached.
 
 ---
 
-## 📄 License / Academic Use
+##  License / Academic Use
 Intended for educational and research use. Add a license file if required by your course or institution.
 
 ---
 
-## ✍️ Author / Course Info
+##  Author 
 Add your name, university, course title, and semester here if you want:
-- **Name:** …
-- **Course:** …
-- **University:** …
-- **Year/Semester:** …
+- **Name:  Panagiota Grosdouli
+
