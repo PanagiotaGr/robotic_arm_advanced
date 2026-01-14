@@ -10,28 +10,28 @@ Designed for **postgraduate-level coursework** in robotics, control, and ROS-bas
 
 ---
 
-## 📌 Features
+##  Features
 
-### ✔ Forward Kinematics (FK)
+###  Forward Kinematics (FK)
 - Implemented using the **Denavit–Hartenberg (DH)** convention  
 - Computes full **4×4 transform** \(T_0^6\)  
 - Publishes end-effector pose as `geometry_msgs/PoseStamped`  
 - Supports **configurable joint names** via parameters
 
-### ✔ Inverse Kinematics (IK) — Damped Least Squares (DLS)
+### Inverse Kinematics (IK) — Damped Least Squares (DLS)
 - Robust numerical IK using **DLS** for singularity handling  
 - **Numerical Jacobian** approximation (**3×6**, position-only)  
 - **Position-based IK** (orientation can be added later)  
 - Iterative solver with convergence / error logging  
 - Publishes joint solutions as `sensor_msgs/JointState`
 
-### ✔ Dummy JointState Publisher
+###  Dummy JointState Publisher
 - Generates **sinusoidal joint trajectories**
 - Enables testing FK/IK nodes **without simulation or hardware**
 
 ---
 
-## 📁 Package Structure
+## Package Structure
 
 ```
 robotic_arm_advanced/
@@ -47,7 +47,7 @@ robotic_arm_advanced/
 
 ---
 
-## 🧰 Requirements
+##  Requirements
 
 - ROS 2 (Humble / Iron / Jazzy should work—any recent ROS 2 distro)
 - Python 3
@@ -60,7 +60,7 @@ Messages used:
 
 ---
 
-## 🚀 Build & Run
+##  Build & Run
 
 ### 1) Create/enter a ROS 2 workspace
 ```bash
@@ -83,7 +83,7 @@ source install/setup.bash
 
 ---
 
-## ▶️ Running the Nodes
+##  Running the Nodes
 
 ### A) Dummy publisher → FK (visualize end-effector pose)
 **Terminal 1**
@@ -121,7 +121,7 @@ ros2 topic echo /ik_joint_states
 
 ---
 
-## 📡 Topics
+##  Topics
 
 ### Published
 - `/joint_states` (`sensor_msgs/JointState`)  
