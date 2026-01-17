@@ -184,11 +184,5 @@ ros2 run robotic_arm_advanced fk_node --ros-args   -p joint_names:="['joint1','j
 - Integrate with RViz / MoveIt 2
 - Replace numerical Jacobian with analytic Jacobian
 
----
 
----
-
-##  Author 
-Add your name, university, course title, and semester here if you want:
-- **Name:  Panagiota Grosdouli
 
