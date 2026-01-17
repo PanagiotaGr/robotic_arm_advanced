@@ -1,37 +1,39 @@
 # 6-DOF Manipulator Kinematics & Control in ROS 2
-**Forward Kinematics • Inverse Kinematics (Damped Least Squares) • Python Nodes**
 
-This repository contains a complete **ROS 2 (Python)** implementation for a **6-DOF robotic manipulator**, including:
-- **Forward Kinematics (FK)** using **Denavit–Hartenberg (DH)** convention
-- **Inverse Kinematics (IK)** using **Damped Least Squares (DLS)** (singularity-robust)
-- Utility/testing nodes (dummy JointState publisher)
+**Forward Kinematics • Inverse Kinematics (Damped Least Squares) • ROS 2 Python nodes**
 
-Designed for **postgraduate-level coursework** in robotics, control, and ROS-based robotic systems.
+This repository is a ROS 2 (Python) implementation for a 6-DOF robotic manipulator, built mainly for coursework and research prototyping. It includes:
 
----
+* Forward kinematics (FK) with the Denavit–Hartenberg (DH) convention
+* Inverse kinematics (IK) with Damped Least Squares (DLS) for singularity-robust numerical solving
+* Small utility nodes to make testing easy (including a dummy `JointState` publisher)
 
-##  Features
+The focus is on clarity and experimentation rather than a full MoveIt 2 pipeline.
 
-### ✔ Forward Kinematics (FK)
-- Implemented using the **Denavit–Hartenberg (DH)** convention  
-- Computes full **4×4 transform** \(T_0^6\)  
-- Publishes end-effector pose as `geometry_msgs/PoseStamped`  
-- Supports **configurable joint names** via parameters
+## What’s inside
 
-### ✔ Inverse Kinematics (IK) — Damped Least Squares (DLS)
-- Robust numerical IK using **DLS** for singularity handling  
-- **Numerical Jacobian** approximation (**3×6**, position-only)  
-- **Position-based IK** (orientation can be added later)  
-- Iterative solver with convergence / error logging  
-- Publishes joint solutions as `sensor_msgs/JointState`
+### Forward Kinematics (FK)
 
-### ✔ Dummy JointState Publisher
-- Generates **sinusoidal joint trajectories**
-- Enables testing FK/IK nodes **without simulation or hardware**
+* DH-based chain model
+* Computes the full (4 \times 4) transform (T_0^6)
+* Publishes the end-effector pose as `geometry_msgs/PoseStamped` on `/end_effector_pose`
+* Joint order can be set through parameters (so it matches your `JointState.name`)
 
----
+### Inverse Kinematics (IK) — Damped Least Squares (DLS)
 
-##  Package Structure
+* Iterative, numerical IK using DLS (more stable near singularities than plain pseudoinverse)
+* Numerical Jacobian (position-only, (3 \times 6))
+* Publishes joint solutions as `sensor_msgs/JointState` on `/ik_joint_states`
+* Logs convergence/error so you can see if it’s drifting or oscillating
+
+> Current IK is position-only. Orientation IK is a straightforward extension and listed in the roadmap.
+
+### Dummy JointState publisher
+
+* Publishes sinusoidal joint trajectories
+* Useful when you want to test FK/IK without Gazebo, RViz, or real hardware
+
+## Repository layout
 
 ```
 robotic_arm_advanced/
@@ -45,144 +47,134 @@ robotic_arm_advanced/
 └── README.md
 ```
 
-----
-
 ## Requirements
 
-- ROS 2 (Humble / Iron / Jazzy should work—any recent ROS 2 distro)
-- Python 3
-- `rclpy`
-- `numpy`
+* ROS 2 (Humble / Iron / Jazzy should be fine)
+* Python 3
+* `rclpy`
+* `numpy`
 
-Messages used:
-- `sensor_msgs/msg/JointState`
-- `geometry_msgs/msg/PoseStamped`
+ROS messages:
 
----
+* `sensor_msgs/msg/JointState`
+* `geometry_msgs/msg/PoseStamped`
 
-##  Build & Run
+## Build
 
-### 1) Create/enter a ROS 2 workspace
+Create a workspace (if you don’t already have one):
+
 ```bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 ```
 
-### 2) Clone this repository into `src/`
+Clone the package into `src/`:
+
 ```bash
-# example
 git clone <YOUR_REPO_URL> robotic_arm_advanced
 ```
 
-### 3) Build
+Build and source:
+
 ```bash
 cd ~/ros2_ws
 colcon build --packages-select robotic_arm_advanced
 source install/setup.bash
 ```
 
----
+## Run
 
-## Running the Nodes
+### A) Dummy publisher → FK
 
-### A) Dummy publisher → FK (visualize end-effector pose)
 **Terminal 1**
+
 ```bash
 source ~/ros2_ws/install/setup.bash
 ros2 run robotic_arm_advanced dummy_joint_pub
 ```
 
 **Terminal 2**
+
 ```bash
 source ~/ros2_ws/install/setup.bash
 ros2 run robotic_arm_advanced fk_node
 ```
 
-Inspect FK output:
+Check the FK output:
+
 ```bash
 ros2 topic echo /end_effector_pose
 ```
 
----
+### B) IK (DLS)
 
-### B) IK (DLS) node
 **Terminal 3**
+
 ```bash
 source ~/ros2_ws/install/setup.bash
 ros2 run robotic_arm_advanced ik_dls_node
 ```
 
-Inspect IK joint outputs:
+Check IK output:
+
 ```bash
 ros2 topic echo /ik_joint_states
 ```
 
-> Note: Depending on your implementation, the IK node may subscribe to a target pose topic (recommended), or it may use an internal/test target. See parameters below.
+Depending on how your IK node is set up, it may either:
 
----
+* subscribe to a target pose topic (recommended), or
+* use an internal test target.
 
-##  Topics
+## Topics
 
-### Published
-- `/joint_states` (`sensor_msgs/JointState`)  
-  From `dummy_joint_pub.py` (test input)
+Published:
 
-- `/end_effector_pose` (`geometry_msgs/PoseStamped`)  
-  From `fk_node.py`
+* `/joint_states` (`sensor_msgs/JointState`) — from `dummy_joint_pub.py`
+* `/end_effector_pose` (`geometry_msgs/PoseStamped`) — from `fk_node.py`
+* `/ik_joint_states` (`sensor_msgs/JointState`) — from `ik_dls_node.py`
 
-- `/ik_joint_states` (`sensor_msgs/JointState`)  
-  From `ik_dls_node.py`
+Subscribed (typical):
 
-### Subscribed (typical)
-- `/joint_states` by `fk_node.py` (current joints)
-- `/end_effector_target` (`geometry_msgs/PoseStamped`) by `ik_dls_node.py` *(if implemented)*
+* `/joint_states` by `fk_node.py`
+* `/end_effector_target` (`geometry_msgs/PoseStamped`) by `ik_dls_node.py` (if you use an external target)
 
-If your IK node uses a different topic name, update it here (or set via parameters).
+If your target topic has a different name, update it here (or expose it as a parameter).
 
----
-
-## ⚙️ Parameters (Typical)
+## Parameters (typical)
 
 ### `fk_node.py`
-- `joint_names` (string array): joint order expected in `JointState.name`
-- `base_frame` (string): e.g. `"base_link"`
-- `ee_frame` (string): e.g. `"tool0"`
+
+* `joint_names` (string array): expected joint order
+* `base_frame` (string): e.g. `base_link`
+* `ee_frame` (string): e.g. `tool0`
 
 ### `ik_dls_node.py`
-- `damping` (float): \(\lambda\) in DLS
-- `max_iters` (int): maximum iterations
-- `tol` (float): position error tolerance
-- `step_size` (float): optional scaling for updates
-- `joint_names` (string array): output joint order
 
-Example:
+* `damping` (float): (\lambda) for DLS
+* `max_iters` (int)
+* `tol` (float): position tolerance (m)
+* `step_size` (float): optional scaling for updates
+* `joint_names` (string array)
+
+Example (FK joint ordering):
+
 ```bash
-ros2 run robotic_arm_advanced fk_node --ros-args   -p joint_names:="['joint1','joint2','joint3','joint4','joint5','joint6']"
+ros2 run robotic_arm_advanced fk_node --ros-args \
+  -p joint_names:="['joint1','joint2','joint3','joint4','joint5','joint6']"
 ```
 
----
+## Practical notes for IK tuning
 
+If the IK oscillates or diverges:
 
----
+* increase `damping` (try 0.05 → 0.2)
+* reduce `step_size`
+* clamp to joint limits (recommended)
 
-##  Testing Tips
+## Roadmap / extensions
 
-- Start with conservative values:
-  - `damping = 0.05` to `0.2`
-  - `max_iters = 100` to `300`
-  - `tol = 1e-3` to `1e-4` (meters)
-- If IK oscillates or diverges:
-  - increase `damping`
-  - reduce `step_size`
-  - set joint limits/clamping (recommended)
-
----
-
-##  Roadmap (Optional Extensions)
-- Add **orientation IK** (6D pose error) and full **6×6 Jacobian**
-- Add **joint limits** & constraint handling
-- Integrate with RViz / MoveIt 2
-- Replace numerical Jacobian with analytic Jacobian
-
-
-
+* Orientation IK (6D pose error) + full (6 \times 6) Jacobian
+* Joint limits + constraint handling
+* RViz / MoveIt 2 integration
+* Analytic Jacobian (instead of numerical)
