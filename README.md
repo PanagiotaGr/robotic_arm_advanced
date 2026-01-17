@@ -186,9 +186,6 @@ ros2 run robotic_arm_advanced fk_node --ros-args   -p joint_names:="['joint1','j
 
 ---
 
-##  License / Academic Use
-Intended for educational and research use. Add a license file if required by your course or institution.
-
 ---
 
 ##  Author 
