@@ -178,3 +178,14 @@ If the IK oscillates or diverges:
 * Joint limits + constraint handling
 * RViz / MoveIt 2 integration
 * Analytic Jacobian (instead of numerical)
+
+
+## Citation
+
+```bibtex
+@software{Grosdouli_Robotic_Arm_2026,
+  author = {Grosdouli, Panagiota},
+  title = {Advanced 6-DOF Manipulator Kinematics and Control Implementation in ROS 2},
+  year = {2026},
+  url = {[https://github.com/PanagiotaGr/robotic_arm_advanced](https://github.com/PanagiotaGr/robotic_arm_advanced)}
+}
