@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this kinematics framework or the DLS implementation, please cite it as follows."
+authors:
+  - family-names: "Grosdouli"
+    given-names: "Panagiota"
+title: "Advanced 6-DOF Manipulator Kinematics and Control Implementation in ROS 2"
+version: 1.0.0
+date-released: 2026-03-27
+url: "https://github.com/PanagiotaGr/robotic_arm_advanced"
